@@ -114,9 +114,13 @@ describe Atum::Link do
       # Otherwise stub doesn't match :(
       let(:encoded_resource) { resource.merge(boolean_field: 'true') }
 
+<<<<<<< HEAD
       pending 'should work'
 
       context 'with a body' do
+=======
+      context "with a body" do
+>>>>>>> Remove unused specs
         let(:link_name) { 'create' }
         let(:params) { [{ resources: resource }] }
         let(:req_path) { '' }
