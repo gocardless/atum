@@ -1,0 +1,52 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'atum'
+
+options = { headers: {}, cache_path: nil }
+
+option_parser = OptionParser.new do |opts|
+  opts.banner = 'Usage: atum module_name schema_filename url'
+
+  opts.on('-h', '--help', 'Display this screen') do
+    puts opts
+    exit
+  end
+
+  opts.on('-H', '--header [HEADER]',
+          'Include header with all requests') do |header|
+    header_key, header_value, _ = header.split(':', 0)
+    options[:headers][header_key] = header_value.strip
+  end
+end
+
+option_parser.parse!
+
+if ARGV.length != 3
+  puts option_parser
+  exit
+end
+
+module_name, schema_filename, url = ARGV
+
+schema = Atum::Schemas::ApiSchema.new(JSON.parse(File.read(schema_filename)))
+
+options = { default_headers: options[:headers] }
+
+generator = Atum::Generation::ClientGenerator.new(module_name, schema, url,
+                                                     options)
+
+output_dir = module_name.underscore
+
+begin
+  Dir.mkdir(output_dir)
+
+  # Create the new files in it!
+  generator.files.each do |filename, contents|
+    File.open("#{output_dir}/#{filename}.rb", 'w') { |f| f.write(contents) }
+  end
+rescue
+  puts "Error writing output! Make sure #{output_dir} does not exist in " \
+       "the current directory."
+  raise
+end
