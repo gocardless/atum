@@ -37,7 +37,11 @@ describe Atum::Link do
 
       context 'non paginated response' do
         context 'without href params' do
-          pending "there isn't a case for this in the sample schema :/"
+          let(:link_name) { 'list' }
+          let(:params) { nil }
+          let(:req_path) { nil }
+          let(:response_body) { { resources: [resource] } }
+          it { is_expected.to eq([resource]) }
         end
 
         context 'with href params' do
@@ -147,6 +151,21 @@ describe Atum::Link do
 
       context 'non JSON response' do
         pending 'returns the raw response'
+
+        let(:link_name) { 'create' }
+        let(:params) { [{ resources: resource }] }
+        let(:req_path) { '' }
+        let(:req_body) { { resources: encoded_resource } }
+        let(:response_body) { { resources: resource } }
+
+        let(:stub) do
+          stub_request(req_method, "#{url}/resource#{req_path}").to_return(
+            status: 200,
+            body: 'oh, this is plain text',
+            headers: { 'Content-Type' => 'text/plain' })
+        end
+
+        it { is_expected.to eq('oh, this is plain text') }
       end
     end
 
