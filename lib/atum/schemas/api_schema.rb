@@ -21,7 +21,7 @@ module Atum
       # @param name [String] The name of the resource.
       # @raise [SchemaError] Raised if an unknown resource name is provided.
       def resource(name)
-        raise SchemaError, "Unknown resource '#{name}'." unless @resources.has_key?(name)
+        raise SchemaError, "Unknown resource '#{name}'." unless @resources.key?(name)
 
         @resources[name]
       end
@@ -36,7 +36,7 @@ module Atum
         "#<Atum::Schema description=\"#{description}\">"
       end
 
-      alias :to_s :inspect
+      alias_method :to_s, :inspect
 
       # Lookup a path in this schema.
       #
@@ -44,7 +44,7 @@ module Atum
       #   the schema
       # @return [Object] Value at the specifed path in this schema.
       def lookup_path(*path)
-        path.reduce(@schema) { |nested, key| nested[key] }
+        path.reduce(@schema) { |a, e| a[e] }
       end
     end
   end

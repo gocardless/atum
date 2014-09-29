@@ -31,7 +31,7 @@ module Atum
       # @raise [SchemaError] Raised if an unknown link name is provided.
       def link_schema(name)
         schema = link_schemas[name]
-        raise SchemaError.new("Unknown link '#{name}'.") unless schema
+        raise SchemaError, "Unknown link '#{name}'." unless schema
         schema
       end
 

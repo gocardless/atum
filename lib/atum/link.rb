@@ -4,7 +4,6 @@ require 'active_support/core_ext/hash/indifferent_access'
 module Atum
   # A link invokes requests with an HTTP server.
   class Link
-
     # The amount limit is increased on each successive fetch in pagination
     LIMIT_INCREMENT = 50
 
@@ -18,7 +17,7 @@ module Atum
     #   - default_headers: Optionally, a set of headers to include in every
     #     request made by the client.  Default is no custom headers.
     #     Default is no caching.
-    def initialize(url, link_schema, options={})
+    def initialize(url, link_schema, options = {})
       root_url, @path_prefix = unpack_url(url)
       @connection = Faraday.new(url: root_url)
       @link_schema = link_schema
@@ -50,13 +49,13 @@ module Atum
     end
 
     def make_request(path, payload)
-      # TODO rip this function into a class, path as an instance variable
+      # TODO: rip this function into a class, path as an instance variable
       response = do_request(path, payload)
       if response_is_error?(response)
         parse_error(response)
       elsif response_is_json?(response)
         body = parse_response_body(response)
-        limit = body.fetch("meta", {}).fetch("limit", nil)
+        limit = body.fetch('meta', {}).fetch('limit', nil)
         limit.nil? ? unenvelope(body) : pagination_enumerator(response, path, payload)
       else
         response.body
@@ -68,8 +67,8 @@ module Atum
       Enumerator.new do |yielder|
         loop do
           body = parse_response_body(response)
-          meta = body.fetch("meta", {})
-          limit = meta.fetch("limit", nil)
+          meta = body.fetch('meta', {})
+          limit = meta.fetch('limit', nil)
 
           body = unenvelope(body)
           body.each { |item| yielder << item }
@@ -77,7 +76,7 @@ module Atum
           break if body.count < limit
 
           response = do_request(path, payload.merge(
-            after: meta["cursors"]["after"],
+            after: meta['cursors']['after'],
             limit: limit + LIMIT_INCREMENT
           ))
         end
@@ -98,7 +97,7 @@ module Atum
 
     def parse_error(response)
       error = parse_response_body(response)['error']
-      raise Atum::ApiError.new(error)
+      raise Atum::ApiError, error
     end
 
     def unenvelope(body)
@@ -107,7 +106,7 @@ module Atum
 
     def unpack_url(url)
       uri = URI.parse(url)
-      return url.gsub(uri.path, ''), uri.path
+      [url.gsub(uri.path, ''), uri.path]
     end
   end
 end

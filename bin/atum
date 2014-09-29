@@ -34,7 +34,7 @@ schema = Atum::Schemas::ApiSchema.new(JSON.parse(File.read(schema_filename)))
 options = { default_headers: options[:headers] }
 
 generator = Atum::Generation::ClientGenerator.new(module_name, schema, url,
-                                                     options)
+                                                  options)
 
 output_dir = module_name.underscore
 
@@ -47,6 +47,6 @@ begin
   end
 rescue
   puts "Error writing output! Make sure #{output_dir} does not exist in " \
-       "the current directory."
+       'the current directory.'
   raise
 end
