@@ -114,13 +114,9 @@ describe Atum::Link do
       # Otherwise stub doesn't match :(
       let(:encoded_resource) { resource.merge(boolean_field: 'true') }
 
-<<<<<<< HEAD
       pending 'should work'
 
-      context 'with a body' do
-=======
       context "with a body" do
->>>>>>> Remove unused specs
         let(:link_name) { 'create' }
         let(:params) { [{ resources: resource }] }
         let(:req_path) { '' }
@@ -153,8 +149,26 @@ describe Atum::Link do
         end
       end
 
+<<<<<<< HEAD
       context 'non JSON response' do
         pending 'returns the raw response'
+=======
+      context "non JSON response" do
+        let(:link_name) { 'create' }
+        let(:params) { [{ resources: resource }] }
+        let(:req_path) { '' }
+        let(:req_body) { { resources: encoded_resource } }
+        let(:response_body) { { resources: resource } }
+
+        let(:stub) do
+          stub_request(req_method, "#{url}/resource#{req_path}").to_return(
+            status: 200,
+            body: 'oh, this is plain text',
+            headers: { 'Content-Type' => 'text/plain' })
+        end
+
+        it { is_expected.to eq('oh, this is plain text') }
+>>>>>>> Spec a non JSON POST response
       end
     end
 
