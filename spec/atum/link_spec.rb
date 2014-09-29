@@ -47,6 +47,9 @@ describe Atum::Link do
           let(:response_body) { { resources: resource } }
 
           it { is_expected.to eq(resource) }
+          it "returns a hash with indifferent access" do
+            expect(run[:date_field]).to eq(resource['date_field'])
+          end
         end
       end
 
@@ -72,7 +75,7 @@ describe Atum::Link do
               headers: { 'Content-Type' => 'application/json' })
         end
 
-        it 'returns has 93 resources' do
+        it 'returns 93 resources' do
           second_stub
           expect(run.count).to eq(93)
         end

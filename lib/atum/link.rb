@@ -1,4 +1,5 @@
 require 'active_support/inflector'
+require 'active_support/core_ext/hash/indifferent_access'
 
 module Atum
   # A link invokes requests with an HTTP server.
@@ -92,7 +93,7 @@ module Atum
     end
 
     def parse_response_body(response)
-      JSON.parse(response.body)
+      JSON.parse(response.body).with_indifferent_access
     end
 
     def parse_error(response)
