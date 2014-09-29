@@ -35,9 +35,13 @@ describe Atum::Link do
     shared_examples_for 'GET requests' do
       let(:req_method) { :get }
 
-      context 'non paginated response' do
-        context 'without href params' do
-          pending "there isn't a case for this in the sample schema :/"
+      context "non paginated response" do
+        context "without href params" do
+          let(:link_name) { 'list' }
+          let(:params) { nil }
+          let(:req_path) { nil }
+          let(:response_body) { { resources: [resource] } }
+          it { is_expected.to eq([resource]) }
         end
 
         context 'with href params' do
