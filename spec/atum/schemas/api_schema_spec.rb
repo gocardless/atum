@@ -15,15 +15,15 @@ describe Atum::Schemas::ApiSchema do
     end
 
     it 'raises with unknown resources' do
-      expect { schema.resource('lolno') }.
-        to raise_error(Atum::SchemaError)
+      expect { schema.resource('lolno') }
+        .to raise_error(Atum::SchemaError)
     end
   end
 
   describe '#resources' do
     it 'has several resources' do
-      expect(schema.resources.map(&:name)).
-        to eq(%w(resource another-resource))
+      expect(schema.resources.map(&:name))
+        .to eq(%w(resource another-resource))
     end
   end
 
@@ -39,11 +39,11 @@ describe Atum::Schemas::ApiSchema do
     end
 
     it 'fetches values at nested keys' do
-      expect(schema.lookup_path('definitions', 'another-resource', 'id')).
-        to eq('schema/another-resource')
+      expect(schema.lookup_path('definitions', 'another-resource', 'id'))
+        .to eq('schema/another-resource')
 
-      expect(schema.lookup_path('definitions', 'resource')).
-        to eq(SAMPLE_SCHEMA['definitions']['resource'])
+      expect(schema.lookup_path('definitions', 'resource'))
+        .to eq(SAMPLE_SCHEMA['definitions']['resource'])
     end
   end
 end

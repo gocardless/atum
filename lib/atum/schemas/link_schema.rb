@@ -45,10 +45,10 @@ module Atum
           info = @api_schema.lookup_path(*path)
           # The reference can be one of several values.
           resource_name = path[1].gsub('-', '_')
-          if info.has_key?('anyOf')
+          if info.key?('anyOf')
             ParameterChoice.new(resource_name,
                                 unpack_multiple_parameters(info['anyOf']))
-          elsif info.has_key?('oneOf')
+          elsif info.key?('oneOf')
             ParameterChoice.new(resource_name,
                                 unpack_multiple_parameters(info['oneOf']))
           else
@@ -59,7 +59,7 @@ module Atum
       end
 
       def needs_request_body?
-        @link_schema_hash.has_key?('schema')
+        @link_schema_hash.key?('schema')
       end
 
       def expected_params
@@ -76,22 +76,22 @@ module Atum
       #   nil if a payload wasn't included in the list of parameters.
       def construct_path(*params)
         if expected_params.count != params.count
-          raise ArgumentError.new(
-            "Wrong number of arguments: #{params.count} for #{expected_params.count}")
+          raise ArgumentError,
+                "Wrong number of arguments: #{params.count} " \
+                "for #{expected_params.count}"
         end
 
-        href.gsub(PARAMETER_REGEX) { |match| format_parameter(params.shift) }
+        href.gsub(PARAMETER_REGEX) { |_match| format_parameter(params.shift) }
       end
 
       private
 
       # Match parameters in definition strings.
-      PARAMETER_REGEX = %r{\{\([%\/a-zA-Z0-9_-]*\)\}}
+      PARAMETER_REGEX = /\{\([%\/a-zA-Z0-9_-]*\)\}/
 
       def href
         @link_schema_hash['href']
       end
-
 
       # Unpack an 'anyOf' or 'oneOf' multi-parameter blob.
       #
@@ -116,7 +116,7 @@ module Atum
       # @param [Fixnum,String,TrueClass,FalseClass,Time] The parameter to format.
       # @return [String] The formatted parameter.
       def format_parameter(parameter)
-        parameter.instance_of?(Time) ? iso_format(parameter): parameter.to_s
+        parameter.instance_of?(Time) ? iso_format(parameter) : parameter.to_s
       end
 
       # Convert a time to an ISO 8601 combined data and time format.

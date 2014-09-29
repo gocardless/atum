@@ -1,7 +1,6 @@
 module Atum
   class Client
     class << self
-
       # Create an HTTP client from a schema.
       #
       # @param schema [Schema] The schema to build an HTTP client for.
@@ -9,10 +8,8 @@ module Atum
       # @param options [Hash] Configuration for links. Possible keys include:
       #   - default_headers: Optionally, a set of headers to include in every
       #     request made by the client.  Default is no custom headers.
-      #   - cache: Optionally, a Moneta-compatible cache to store ETags.  Default
-      #     is no caching.
       # @return [Client] A client with resources and links from the schema
-      def client_from_schema(schema, url, options={})
+      def client_from_schema(schema, url, options = {})
         resources = {}
         schema.resources.each do |resource_schema|
           links = {}
@@ -35,23 +32,23 @@ module Atum
 
     def method_missing(method)
       unless respond_to?(method)
-        raise NoMethodError.new("resource `#{method}' doesn't exist for #{to_s}")
+        raise NoMethodError, "resource `#{method}' doesn't exist for #{self}"
       end
 
       get_resource(method.to_s)
     end
 
     def respond_to?(method)
-      @resources.has_key?(method.to_s)
+      @resources.key?(method.to_s)
     end
 
     def inspect
       url = URI.parse(@url)
       url.password = 'REDACTED' unless url.password.nil?
-      "#<Atum::Client url=\"#{url.to_s}\">"
+      "#<Atum::Client url=\"#{url}\">"
     end
 
-    alias :to_s :inspect
+    alias_method :to_s, :inspect
 
     private
 

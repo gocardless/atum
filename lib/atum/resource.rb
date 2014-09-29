@@ -9,7 +9,7 @@ module Atum
     end
 
     def respond_to?(name)
-      @links.has_key?(name.to_s)
+      @links.key?(name.to_s)
     end
 
     private

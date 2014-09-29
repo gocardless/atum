@@ -22,7 +22,7 @@ module Atum
 
       # A description created by merging individual parameter descriptions.
       def description
-        @parameters.map { |parameter| parameter.description }.join(' or ')
+        @parameters.map(&:description).join(' or ')
       end
 
       # A pretty representation of this instance.

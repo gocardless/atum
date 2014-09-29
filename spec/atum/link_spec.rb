@@ -11,9 +11,9 @@ describe Atum::Link do
   let(:req_body) { nil }
   let(:response_status) { 200 }
   let(:stub) do
-    stub_request(req_method, "#{url}/resource#{req_path}").
-      with(body: req_body).
-      to_return(
+    stub_request(req_method, "#{url}/resource#{req_path}")
+      .with(body: req_body)
+      .to_return(
         status: response_status,
         body: response_body.to_json,
         headers: { 'Content-Type' => 'application/json' })
@@ -29,45 +29,45 @@ describe Atum::Link do
       'email_field'   => 'isaac@seymour.com' }
   end
 
-  describe "#run" do
+  describe '#run' do
     subject(:run) { link.run(*params) }
 
-    shared_examples_for "GET requests" do
+    shared_examples_for 'GET requests' do
       let(:req_method) { :get }
 
-      context "non paginated response" do
-        context "without href params" do
+      context 'non paginated response' do
+        context 'without href params' do
           pending "there isn't a case for this in the sample schema :/"
         end
 
-        context "with href params" do
+        context 'with href params' do
           let(:link_name) { 'info' }
           let(:params) { ['44724831-bf66-4bc2-865f-e2c4c2b14c78'] }
           let(:req_path) { '/44724831-bf66-4bc2-865f-e2c4c2b14c78' }
           let(:response_body) { { resources: resource } }
 
           it { is_expected.to eq(resource) }
-          it "returns a hash with indifferent access" do
+          it 'returns a hash with indifferent access' do
             expect(run[:date_field]).to eq(resource['date_field'])
           end
         end
       end
 
-      context "paginated response" do
+      context 'paginated response' do
         let(:link_name) { 'list' }
         let(:params) { [] }
         let(:req_path) { '' }
         let(:response_body) do
-          { resources: (1..50).map { |x| resource },
+          { resources: (1..50).map { |_x| resource },
             meta: { limit: 50, cursors: { before: nil, after: 'afterID' } } }
         end
 
         let(:second_stub) do
-          stub_request(req_method, "#{url}/resource#{req_path}").
-            with(query: hash_including(after: 'afterID')).
-            to_return(
+          stub_request(req_method, "#{url}/resource#{req_path}")
+            .with(query: hash_including(after: 'afterID'))
+            .to_return(
               status: 200,
-              body: { resources: (1..43).map { |x| resource },
+              body: { resources: (1..43).map { |_x| resource },
                       meta: { limit: 60,
                               cursors: { before: 'beforeID', after: 'afterID' }
                             }
@@ -85,12 +85,12 @@ describe Atum::Link do
           expect(run.take(50).last).to eq(resource)
         end
 
-        context "with href params" do
-          pending "this is also missing from the sample schema"
+        context 'with href params' do
+          pending 'this is also missing from the sample schema'
         end
       end
 
-     context "non JSON response" do
+      context 'non JSON response' do
         let(:req_path) { '' }
         let(:link_name) { 'list' }
         let(:params) { [] }
@@ -105,14 +105,14 @@ describe Atum::Link do
       end
     end
 
-    shared_examples_for "POST requests" do
+    shared_examples_for 'POST requests' do
       let(:req_method) { :post }
       # Otherwise stub doesn't match :(
       let(:encoded_resource) { resource.merge(boolean_field: 'true') }
 
-      pending "should work"
+      pending 'should work'
 
-      context "with a body" do
+      context 'with a body' do
         let(:link_name) { 'create' }
         let(:params) { [{ resources: resource }] }
         let(:req_path) { '' }
@@ -124,7 +124,7 @@ describe Atum::Link do
         it { is_expected.to eq(resource) }
       end
 
-      context "with a validation error" do
+      context 'with a validation error' do
         let(:req_path) { '' }
         let(:link_name) { 'create' }
         let(:params) { [] }
@@ -145,14 +145,14 @@ describe Atum::Link do
         end
       end
 
-      context "non JSON response" do
-        pending "returns the raw response"
+      context 'non JSON response' do
+        pending 'returns the raw response'
       end
     end
 
-    context "with invalid parameters" do
+    context 'with invalid parameters' do
       let(:stub) { nil }
-      context "with additional params" do
+      context 'with additional params' do
         let(:link_name) { 'info' }
         let(:params) { ['44724831-bf66-4bc2-865f-e2c4c2b14c78', 'ooops'] }
 
@@ -161,7 +161,7 @@ describe Atum::Link do
         end
       end
 
-      context "with missing params" do
+      context 'with missing params' do
         let(:link_name) { 'info' }
         let(:params) { [] }
 
@@ -170,7 +170,7 @@ describe Atum::Link do
         end
       end
 
-      context "with extra params and a body" do
+      context 'with extra params and a body' do
         let(:link_name) { 'create' }
         let(:params) { ['oooops', { resources: { im: 'a resource' } }] }
 
@@ -179,7 +179,7 @@ describe Atum::Link do
         end
       end
 
-      context "with missing params and a body" do
+      context 'with missing params and a body' do
         let(:link_name) { 'update' }
         let(:params) { [{ resources: { im: 'a resource' } }] }
 
@@ -189,15 +189,14 @@ describe Atum::Link do
       end
     end
 
-    context "on base domain" do
-      it_behaves_like "GET requests"
-      it_behaves_like "POST requests"
+    context 'on base domain' do
+      it_behaves_like 'GET requests'
+      it_behaves_like 'POST requests'
     end
 
-    context "on domain with path" do
-      it_behaves_like "GET requests"
-      it_behaves_like "POST requests"
+    context 'on domain with path' do
+      it_behaves_like 'GET requests'
+      it_behaves_like 'POST requests'
     end
   end
 end
-
