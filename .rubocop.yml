@@ -1,0 +1,9 @@
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  Exclude:
+    - Guardfile
+    - atum.gemspec
+    - vendor/**/*
+    - spec/fixtures/fruity_client/**/*
+    - tmp/**/*
