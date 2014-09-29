@@ -35,8 +35,8 @@ describe Atum::Link do
     shared_examples_for 'GET requests' do
       let(:req_method) { :get }
 
-      context "non paginated response" do
-        context "without href params" do
+      context 'non paginated response' do
+        context 'without href params' do
           let(:link_name) { 'list' }
           let(:params) { nil }
           let(:req_path) { nil }
@@ -116,7 +116,7 @@ describe Atum::Link do
 
       pending 'should work'
 
-      context "with a body" do
+      context 'with a body' do
         let(:link_name) { 'create' }
         let(:params) { [{ resources: resource }] }
         let(:req_path) { '' }
@@ -149,11 +149,9 @@ describe Atum::Link do
         end
       end
 
-<<<<<<< HEAD
       context 'non JSON response' do
         pending 'returns the raw response'
-=======
-      context "non JSON response" do
+
         let(:link_name) { 'create' }
         let(:params) { [{ resources: resource }] }
         let(:req_path) { '' }
@@ -168,7 +166,6 @@ describe Atum::Link do
         end
 
         it { is_expected.to eq('oh, this is plain text') }
->>>>>>> Spec a non JSON POST response
       end
     end
 
