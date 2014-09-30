@@ -85,7 +85,7 @@ module Atum
             limit: limit + LIMIT_INCREMENT
           ))
         end
-      end
+      end.lazy
     end
 
     def apply_link_schema(hash)
