@@ -36,17 +36,12 @@ options = { default_headers: options[:headers] }
 generator = Atum::Generation::ClientGenerator.new(module_name, schema, url,
                                                   options)
 
-output_dir = module_name.underscore
-
 begin
-  Dir.mkdir(output_dir)
-
   # Create the new files in it!
   generator.files.each do |filename, contents|
-    File.open("#{output_dir}/#{filename}.rb", 'w') { |f| f.write(contents) }
+    File.open("#{filename}.rb", 'w') { |f| f.write(contents) }
   end
 rescue
-  puts "Error writing output! Make sure #{output_dir} does not exist in " \
-       'the current directory.'
+  puts 'Error writing output!'
   raise
 end
