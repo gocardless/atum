@@ -9,6 +9,7 @@ module Atum
 
     def initialize(error)
       @error = error
+      super("#{@error['message']}, see #{@error['documentation_url']}")
     end
   end
 end
