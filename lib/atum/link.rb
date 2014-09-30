@@ -101,7 +101,9 @@ module Atum
     end
 
     def response_is_json?(response)
-      response.headers.fetch('Content-Type', '').include?('application/json')
+      content_type = response.headers['Content-Type'] ||
+                     response.headers['content-type'] || ''
+      content_type.include?('application/json')
     end
 
     def response_is_error?(response)

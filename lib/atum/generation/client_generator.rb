@@ -30,7 +30,8 @@ module Atum
         }
 
         resources.reduce(base_files) do |other_files, resource|
-          other_files.merge("#{namespace}/#{resource.name.underscore}" => generate_resource(resource))
+          other_files.merge("#{namespace}/#{resource.name.underscore}" =>
+                              generate_resource(resource))
         end
       end
 
