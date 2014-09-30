@@ -94,7 +94,7 @@ module Atum
         next unless definitions.fetch(k, {}).fetch('format', nil)
         case definitions[k]['format']
         when 'date-time'
-          hash[k] = Time.parse(v)
+          hash[k] = Time.parse(v) unless v.nil?
         end
       end
       hash
