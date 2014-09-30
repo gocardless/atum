@@ -90,9 +90,10 @@ module Atum
     def apply_link_schema(hash)
       definitions = @link_schema.resource_schema.definitions
       hash.each do |k, v|
-        next unless definitions.key?(k) && definitions[k].key?('format')
+        next unless definitions.fetch(k, {}).fetch('format', nil)
         case definitions[k]['format']
-        when 'date-time' then hash[k] = Time.parse(v)
+        when 'date-time'
+          hash[k] = Time.parse(v)
         end
       end
       hash

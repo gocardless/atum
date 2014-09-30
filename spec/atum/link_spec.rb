@@ -113,7 +113,7 @@ describe Atum::Link do
     shared_examples_for 'POST requests' do
       let(:req_method) { :post }
       # Otherwise stub doesn't match :(
-      let(:encoded_resource) { response.merge(boolean_field: 'true') }
+      let(:encoded_request) { response.merge(boolean_field: 'true') }
 
       pending 'should work'
 
@@ -121,7 +121,7 @@ describe Atum::Link do
         let(:link_name) { 'create' }
         let(:params) { [{ resources: response }] }
         let(:req_path) { '' }
-        let(:req_body) { { resources: encoded_resource } }
+        let(:req_body) { { resources: encoded_request } }
         let(:response_body) { { resources: response } }
 
         before { stub }
