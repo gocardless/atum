@@ -20,14 +20,15 @@ describe Atum::Link do
   end
 
   before { stub }
-
+  let(:date_field) { Time.parse('2014-09-02T13:43:01Z') }
   let(:resource) do
-    { 'date_field'    => '2014-09-02T13:43:01Z',
+    { 'date_field'    => date_field,
       'string_field'  => 'Hello I love strings',
       'boolean_field' => true,
       'uuid_field'    => '44724831-bf66-4bc2-865f-e2c4c2b14c78',
       'email_field'   => 'isaac@seymour.com' }
   end
+  let(:response) { resource.merge('date_field' => date_field.iso8601) }
 
   describe '#run' do
     subject(:run) { link.run(*params) }
@@ -40,15 +41,15 @@ describe Atum::Link do
           let(:link_name) { 'list' }
           let(:params) { nil }
           let(:req_path) { nil }
-          let(:response_body) { { resources: [resource] } }
-          it { is_expected.to eq([resource]) }
+          let(:response_body) { { resources: response } }
+          it { is_expected.to eq(resource) }
         end
 
         context 'with href params' do
           let(:link_name) { 'info' }
           let(:params) { ['44724831-bf66-4bc2-865f-e2c4c2b14c78'] }
           let(:req_path) { '/44724831-bf66-4bc2-865f-e2c4c2b14c78' }
-          let(:response_body) { { resources: resource } }
+          let(:response_body) { { resources: response } }
 
           it { is_expected.to eq(resource) }
           it 'returns a hash with indifferent access' do
@@ -112,16 +113,16 @@ describe Atum::Link do
     shared_examples_for 'POST requests' do
       let(:req_method) { :post }
       # Otherwise stub doesn't match :(
-      let(:encoded_resource) { resource.merge(boolean_field: 'true') }
+      let(:encoded_request) { response.merge(boolean_field: 'true') }
 
       pending 'should work'
 
       context 'with a body' do
         let(:link_name) { 'create' }
-        let(:params) { [{ resources: resource }] }
+        let(:params) { [{ resources: response }] }
         let(:req_path) { '' }
-        let(:req_body) { { resources: encoded_resource } }
-        let(:response_body) { { resources: resource } }
+        let(:req_body) { { resources: encoded_request } }
+        let(:response_body) { { resources: response } }
 
         before { stub }
 
@@ -153,10 +154,10 @@ describe Atum::Link do
         pending 'returns the raw response'
 
         let(:link_name) { 'create' }
-        let(:params) { [{ resources: resource }] }
+        let(:params) { [{ resources: response }] }
         let(:req_path) { '' }
         let(:req_body) { { resources: encoded_resource } }
-        let(:response_body) { { resources: resource } }
+        let(:response_body) { { resources: response } }
 
         let(:stub) do
           stub_request(req_method, "#{url}/resource#{req_path}").to_return(
