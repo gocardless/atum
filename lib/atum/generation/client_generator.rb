@@ -1,3 +1,5 @@
+require 'fileutils'
+
 module Atum
   module Generation
     class ClientGenerator
@@ -20,13 +22,15 @@ module Atum
 
       # Returns a map from file name to contents
       def files
+        namespace = @module_name.downcase.underscore
+        FileUtils.mkdir_p namespace
         base_files = {
-          @module_name.underscore => generate_module,
-          'client' => generate_client
+          namespace => generate_module,
+          "#{namespace}/client" => generate_client
         }
 
         resources.reduce(base_files) do |other_files, resource|
-          other_files.merge(resource.name.underscore => generate_resource(resource))
+          other_files.merge("#{namespace}/#{resource.name.underscore}" => generate_resource(resource))
         end
       end
 

@@ -11,5 +11,9 @@ module Atum
       @error = error
       super("#{@error['message']}, see #{@error['documentation_url']}")
     end
+
+    def message
+      "#{@error['message']}, see #{@error['documentation_url']}"
+    end
   end
 end
