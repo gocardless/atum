@@ -1,6 +1,7 @@
 module Atum
   module Schemas
     class LinkSchema
+      attr_reader :resource_schema
       # @param api_schema [ApiSchema] The schema for the whole API
       # @param resource_schema [ResourceSchema] The schema of the resource this
       # link belongs to.

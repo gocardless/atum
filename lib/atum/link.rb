@@ -56,7 +56,11 @@ module Atum
       elsif response_is_json?(response)
         body = parse_response_body(response)
         limit = body.fetch('meta', {}).fetch('limit', nil)
-        limit.nil? ? unenvelope(body) : pagination_enumerator(response, path, payload)
+        if limit.nil?
+          apply_link_schema(unenvelope(body))
+        else
+          pagination_enumerator(response, path, payload)
+        end
       else
         response.body
       end
@@ -71,7 +75,7 @@ module Atum
           limit = meta.fetch('limit', nil)
 
           body = unenvelope(body)
-          body.each { |item| yielder << item }
+          body.each { |item| yielder << apply_link_schema(item) }
 
           break if body.count < limit
 
@@ -81,6 +85,17 @@ module Atum
           ))
         end
       end
+    end
+
+    def apply_link_schema(hash)
+      definitions = @link_schema.resource_schema.definitions
+      hash.each do |k, v|
+        next unless definitions.key?(k) && definitions[k].key?('format')
+        case definitions[k]['format']
+        when 'date-time' then hash[k] = Time.parse(v)
+        end
+      end
+      hash
     end
 
     def response_is_json?(response)
