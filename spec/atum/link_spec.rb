@@ -87,7 +87,7 @@ describe Atum::Link do
 
         it 'only uses one call to fetch <= 50 resources' do
           expect(run.first(10).count).to eq(10)
-          expect(run.take(50).last).to eq(resource)
+          expect(run.take(50).to_a.last).to eq(resource)
         end
 
         context 'with href params' do
