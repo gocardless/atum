@@ -40,7 +40,7 @@ module Atum
         payload = parameters.pop
       elsif parameters.count > @link_schema.expected_params.count
         payload = parameters.pop
-        raise ArgumentError, "options must be a hash" unless payload.is_a?(Hash)
+        raise ArgumentError, 'options must be a hash' unless payload.is_a?(Hash)
       end
 
       path = @link_schema.construct_path(*parameters)

@@ -54,7 +54,7 @@ describe Atum::Link do
             expect(run[:date_field]).to eq(resource['date_field'])
           end
 
-          context "with optional params" do
+          context 'with optional params' do
             let(:params) { [{ something: true }] }
             it { is_expected.to eq(resource) }
           end
@@ -68,10 +68,12 @@ describe Atum::Link do
 
           it { is_expected.to eq(resource) }
 
-          context "with optional params" do
-            let(:params) { ['44724831-bf66-4bc2-865f-e2c4c2b14c78',
-                            { something: true }] }
-          it { is_expected.to eq(resource) }
+          context 'with optional params' do
+            let(:params) do
+              ['44724831-bf66-4bc2-865f-e2c4c2b14c78',
+               { something: true }]
+            end
+            it { is_expected.to eq(resource) }
           end
         end
       end

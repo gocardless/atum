@@ -32,11 +32,11 @@ module Atum
           s = param.name
           s += " = #{param.default}" if param.respond_to?(:default)
           s
-        end.join(", ")
+        end.join(', ')
       end
 
       def parameter_names
-        parameters.map(&:name).join(", ")
+        parameters.map(&:name).join(', ')
       end
     end
   end
