@@ -25,7 +25,7 @@ module <%= @module_name %>
     commentify("\n" + param_comments, 2)
   end
 %>
-    def <%= method(link.name, link.parameter_names) %>
+    def <%= method(link.name, link.parameter_names_with_defaults) %>
       @client.<%= @resource_name %>.<%= method(link.name, link.parameter_names) %>
     end
 <% end %>

@@ -17,6 +17,12 @@ describe Atum::Link do
         status: response_status,
         body: response_body.to_json,
         headers: { 'Content-Type' => 'application/json' })
+    stub_request(req_method, "#{url}/resource#{req_path}?something=true")
+      .with(body: req_body)
+      .to_return(
+        status: response_status,
+        body: response_body.to_json,
+        headers: { 'Content-Type' => 'application/json' })
   end
 
   before { stub }
@@ -43,6 +49,15 @@ describe Atum::Link do
           let(:req_path) { nil }
           let(:response_body) { { resources: response } }
           it { is_expected.to eq(resource) }
+
+          it 'returns a hash with indifferent access' do
+            expect(run[:date_field]).to eq(resource['date_field'])
+          end
+
+          context "with optional params" do
+            let(:params) { [{ something: true }] }
+            it { is_expected.to eq(resource) }
+          end
         end
 
         context 'with href params' do
@@ -52,8 +67,11 @@ describe Atum::Link do
           let(:response_body) { { resources: response } }
 
           it { is_expected.to eq(resource) }
-          it 'returns a hash with indifferent access' do
-            expect(run[:date_field]).to eq(resource['date_field'])
+
+          context "with optional params" do
+            let(:params) { ['44724831-bf66-4bc2-865f-e2c4c2b14c78',
+                            { something: true }] }
+          it { is_expected.to eq(resource) }
           end
         end
       end

@@ -35,7 +35,13 @@ module Atum
     # @return [String,Object,Enumerator] A string for text responses, an
     #   object for JSON responses, or an enumerator for list responses.
     def run(*parameters)
-      payload = @link_schema.needs_request_body? ? parameters.pop : {}
+      payload = {}
+      if @link_schema.needs_request_body?
+        payload = parameters.pop
+      elsif parameters.count > @link_schema.expected_params.count
+        payload = parameters.pop
+        raise ArgumentError, "options must be a hash" unless payload.is_a?(Hash)
+      end
 
       path = @link_schema.construct_path(*parameters)
       path = "#{@path_prefix}#{path}" unless @path_prefix == '/'
