@@ -37,7 +37,7 @@ module Atum
     def run(*parameters)
       options = parameters.pop
       raise ArgumentError, 'options must be a hash' unless options.is_a?(Hash)
-      options = {headers: @headers}.merge(parameters.pop)
+      options = {headers: @headers}.merge(options)
 
       options[:body] = parameters.pop if @link_schema.needs_request_body?
 
