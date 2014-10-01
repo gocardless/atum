@@ -16,9 +16,7 @@ module Atum
       def parameters
         @parameters ||= begin
           params = @link_schema.parameter_details
-          if @link_schema.needs_request_body?
-            params << BodyParameter.new
-          end
+          params << BodyParameter.new if @link_schema.needs_request_body?
           params << OptionsParameter.new
           params
         end
