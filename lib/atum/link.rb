@@ -55,7 +55,7 @@ module Atum
         request.url path
         request.body = options[:body] || {}
         request.params = options[:query] || {}
-        request.headers = @headers.merge(options.fetch(:headers, {}))
+        request.headers = @connection.headers.merge(options.fetch(:headers, {}))
       end
     end
 
