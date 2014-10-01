@@ -18,9 +18,8 @@ module Atum
           params = @link_schema.parameter_details
           if @link_schema.needs_request_body?
             params << BodyParameter.new
-          else
-            params << OptionsParameter.new
           end
+          params << OptionsParameter.new
           params
         end
       end
