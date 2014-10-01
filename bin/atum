@@ -13,6 +13,11 @@ option_parser = OptionParser.new do |opts|
     exit
   end
 
+  opts.on('-v', '--version', 'Display the version atum is running at') do
+    puts Atum::VERSION
+    exit
+  end
+
   opts.on('-H', '--header [HEADER]',
           'Include header with all requests') do |header|
     header_key, header_value, _ = header.split(':', 0)
