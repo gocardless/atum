@@ -22,11 +22,11 @@ describe Atum::Resource do
     let(:response_body) { { 'resources' => ['Hello, world!'] } }
 
     it 'gets the link' do
-      stub_request(:get, 'https://username:password@example.com/resource')
+      stub_request(:get, 'https://example.com/resource')
         .to_return(status: 200, body: response_body.to_json,
                   headers: { 'Content-Type' => 'application/json' })
 
-      expect(resource.list).to eq(['Hello, world!'])
+      expect(resource.list({})).to eq(['Hello, world!'])
     end
   end
 end
