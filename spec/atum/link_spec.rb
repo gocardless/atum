@@ -45,7 +45,7 @@ describe Atum::Link do
       context 'non paginated response' do
         context 'without href params' do
           let(:link_name) { 'list' }
-          let(:params) { nil }
+          let(:params) { [{}] }
           let(:req_path) { nil }
           let(:response_body) { { resources: response } }
           it { is_expected.to eq(resource) }
@@ -55,14 +55,14 @@ describe Atum::Link do
           end
 
           context 'with optional params' do
-            let(:params) { [{ something: true }] }
+            let(:params) { [{ query: { something: true } }] }
             it { is_expected.to eq(resource) }
           end
         end
 
         context 'with href params' do
           let(:link_name) { 'info' }
-          let(:params) { ['44724831-bf66-4bc2-865f-e2c4c2b14c78'] }
+          let(:params) { ['44724831-bf66-4bc2-865f-e2c4c2b14c78', {}] }
           let(:req_path) { '/44724831-bf66-4bc2-865f-e2c4c2b14c78' }
           let(:response_body) { { resources: response } }
 
@@ -71,7 +71,7 @@ describe Atum::Link do
           context 'with optional params' do
             let(:params) do
               ['44724831-bf66-4bc2-865f-e2c4c2b14c78',
-               { something: true }]
+               { query: { something: true } }]
             end
             it { is_expected.to eq(resource) }
           end
@@ -80,7 +80,7 @@ describe Atum::Link do
 
       context 'paginated response' do
         let(:link_name) { 'list' }
-        let(:params) { [] }
+        let(:params) { [{}] }
         let(:req_path) { '' }
         let(:response_body) do
           { resources: (1..50).map { |_x| resource },
@@ -118,7 +118,7 @@ describe Atum::Link do
       context 'non JSON response' do
         let(:req_path) { '' }
         let(:link_name) { 'list' }
-        let(:params) { [] }
+        let(:params) { [{}] }
         let(:stub) do
           stub_request(req_method, "#{url}/resource#{req_path}").to_return(
             status: 200,
@@ -139,7 +139,7 @@ describe Atum::Link do
 
       context 'with a body' do
         let(:link_name) { 'create' }
-        let(:params) { [{ resources: response }] }
+        let(:params) { [req_body, {}] }
         let(:req_path) { '' }
         let(:req_body) { { resources: encoded_request } }
         let(:response_body) { { resources: response } }
@@ -152,7 +152,7 @@ describe Atum::Link do
       context 'with a validation error' do
         let(:req_path) { '' }
         let(:link_name) { 'create' }
-        let(:params) { [] }
+        let(:params) { [{}] }
         let(:response_status) { 422 }
         let(:response_body) do
           { error: {
@@ -212,7 +212,7 @@ describe Atum::Link do
 
       context 'with extra params and a body' do
         let(:link_name) { 'create' }
-        let(:params) { ['oooops', { resources: { im: 'a resource' } }] }
+        let(:params) { ['oooops', { resources: { im: 'a resource' } }, {}] }
 
         it 'raises ArgumentError' do
           expect { run }.to raise_error(ArgumentError)

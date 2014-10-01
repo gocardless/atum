@@ -35,29 +35,32 @@ module Atum
     # @return [String,Object,Enumerator] A string for text responses, an
     #   object for JSON responses, or an enumerator for list responses.
     def run(*parameters)
-      payload = {}
-      if @link_schema.needs_request_body?
-        payload = parameters.pop
-      elsif parameters.count > @link_schema.expected_params.count
-        payload = parameters.pop
-        raise ArgumentError, 'options must be a hash' unless payload.is_a?(Hash)
-      end
+      options = parameters.pop
+      raise ArgumentError, 'options must be a hash' unless options.is_a?(Hash)
+
+      options[:body] = parameters.pop if @link_schema.needs_request_body?
 
       path = @link_schema.construct_path(*parameters)
       path = "#{@path_prefix}#{path}" unless @path_prefix == '/'
 
-      make_request(path, payload)
+      make_request(path, options)
     end
 
     private
 
-    def do_request(path, payload)
-      @connection.send(@link_schema.method, path, payload, @headers)
+    def do_request(path, options)
+      options = options.with_indifferent_access
+      @connection.send(@link_schema.method) do |request|
+        request.url path
+        request.body = options[:body] || {}
+        request.params = options[:query] || {}
+        request.headers = @headers.merge(options.fetch(:headers, {}))
+      end
     end
 
-    def make_request(path, payload)
+    def make_request(path, options)
       # TODO: rip this function into a class, path as an instance variable
-      response = do_request(path, payload)
+      response = do_request(path, options)
       if response_is_error?(response)
         parse_error(response)
       elsif response_is_json?(response)
@@ -66,14 +69,14 @@ module Atum
         if limit.nil?
           apply_link_schema(unenvelope(body))
         else
-          pagination_enumerator(response, path, payload)
+          pagination_enumerator(response, path, options)
         end
       else
         response.body
       end
     end
 
-    def pagination_enumerator(initial_response, path, payload)
+    def pagination_enumerator(initial_response, path, options)
       response = initial_response
       Enumerator.new do |yielder|
         loop do
@@ -86,10 +89,10 @@ module Atum
 
           break if body.count < limit
 
-          response = do_request(path, payload.merge(
-            after: meta['cursors']['after'],
-            limit: limit + LIMIT_INCREMENT
-          ))
+          new_options = options.dup
+          new_options[:query] = options.fetch(:query, {}).merge(
+            after: meta['cursors']['after'], limit: limit + LIMIT_INCREMENT)
+          response = do_request(path, new_options)
         end
       end.lazy
     end
