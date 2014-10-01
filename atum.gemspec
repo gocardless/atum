@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['i.seymour@oxon.org', 'peterejhamilton@gmail.com']
   spec.description   = 'A Ruby client generator for JSON APIs described with a JSON schema'
   spec.summary       = 'A Ruby client generator for JSON APIs described with a JSON schema'
-  spec.homepage      = 'https://github.com/isaacseymour/atum'
+  spec.homepage      = 'https://github.com/gocardless/atum'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
