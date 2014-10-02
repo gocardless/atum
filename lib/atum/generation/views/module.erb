@@ -12,6 +12,7 @@ require 'uri'
 module <%= @module_name.split("::")[0..i].join("::") %>; end
 <% end %>
 
+require_relative '<%= @module_name.downcase.underscore.split("/").last %>/version'
 require_relative '<%= @module_name.downcase.underscore.split("/").last %>/client'
 <% @resources.each do |resource| %>
 require_relative '<%= @module_name.downcase.underscore.split("/").last %>/<%= resource.name.underscore %>'
