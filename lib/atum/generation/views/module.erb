@@ -64,7 +64,29 @@ module <%= @module_name %>
 
   # Get the default options.
   def self.default_options
-    { default_headers: <%= @default_headers %> }
+    {
+      default_headers: {
+        <%= @default_headers.merge("User-Agent" => '#{user_agent}').map do |k, v|
+          "\"#{k.to_s}\" => \"#{v.to_s}\""
+        end.join(",\n        ") %>
+    } }
+  end
+
+  def self.user_agent
+    @user_agent ||=
+      begin
+        gem_name = "<%= @module_name.downcase.underscore.gsub("/", "-") %>"
+        gem_info = "#{gem_name}"
+        gem_info += "/v#{<%= @module_name %>::VERSION}" if defined?(<%= @module_name %>::VERSION)
+        ruby_engine = defined?(RUBY_ENGINE) ? RUBY_ENGINE : 'ruby'
+        ruby_version = RUBY_VERSION
+        ruby_version += " p#{RUBY_PATCHLEVEL}" if defined?(RUBY_PATCHLEVEL)
+        comment = ["#{ruby_engine} #{ruby_version}"]
+        comment << "atum v#{Atum::VERSION}"
+        comment << "faraday v#{Faraday::VERSION}"
+        comment << RUBY_PLATFORM if defined?(RUBY_PLATFORM)
+        "#{gem_info} (#{comment.join("; ")})"
+      end
   end
 
   SCHEMA = Atum::Schemas::ApiSchema.new(JSON.load(<<-'JSON'))
