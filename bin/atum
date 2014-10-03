@@ -3,7 +3,7 @@
 require 'optparse'
 require 'atum'
 
-options = { headers: {}, cache_path: nil }
+options = { headers: {} }
 
 option_parser = OptionParser.new do |opts|
   opts.banner = 'Usage: atum module_name schema_filename url'
@@ -32,17 +32,14 @@ if ARGV.length != 3
   exit
 end
 
-module_name, schema_filename, url = ARGV
-
-schema = Atum::Schemas::ApiSchema.new(JSON.parse(File.read(schema_filename)))
-
 options = { default_headers: options[:headers] }
 
+module_name, schema_filename, url = ARGV
+schema = Atum::Schemas::ApiSchema.new(JSON.parse(File.read(schema_filename)))
 generator = Atum::Generation::ClientGenerator.new(module_name, schema, url,
                                                   options)
 
 begin
-  # Create the new files in it!
   generator.files.each do |filename, contents|
     File.open("#{filename}.rb", 'w') { |f| f.write(contents) }
   end
