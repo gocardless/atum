@@ -53,7 +53,7 @@ module Atum
       options = options.with_indifferent_access
       @connection.send(@link_schema.method) do |request|
         request.url path
-        request.body = options[:body] || {}
+        request.body = options[:body].to_json if options[:body]
         request.params = options[:query] || {}
         request.headers = @connection.headers.merge(options.fetch(:headers, {}))
       end

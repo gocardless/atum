@@ -12,13 +12,13 @@ describe Atum::Link do
   let(:response_status) { 200 }
   let(:stub) do
     stub_request(req_method, "#{url}/resource#{req_path}")
-      .with(body: req_body)
+      .with(body: req_body.nil? ? nil : req_body.to_json)
       .to_return(
         status: response_status,
         body: response_body.to_json,
         headers: { 'Content-Type' => 'application/json' })
     stub_request(req_method, "#{url}/resource#{req_path}?something=true")
-      .with(body: req_body)
+      .with(body: req_body.nil? ? nil : req_body.to_json)
       .to_return(
         status: response_status,
         body: response_body.to_json,
@@ -132,8 +132,6 @@ describe Atum::Link do
 
     shared_examples_for 'POST requests' do
       let(:req_method) { :post }
-      # Otherwise stub doesn't match :(
-      let(:encoded_request) { response.merge(boolean_field: 'true') }
 
       pending 'should work'
 
@@ -141,7 +139,7 @@ describe Atum::Link do
         let(:link_name) { 'create' }
         let(:params) { [req_body, {}] }
         let(:req_path) { '' }
-        let(:req_body) { { resources: encoded_request } }
+        let(:req_body) { { resources: response } }
         let(:response_body) { { resources: response } }
 
         before { stub }
