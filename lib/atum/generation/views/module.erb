@@ -67,7 +67,10 @@ module <%= @module_name %>
   def self.default_options
     {
       default_headers: {
-        <%= @default_headers.merge("User-Agent" => '#{user_agent}').map do |k, v|
+        <%= @default_headers.merge(
+            'User-Agent' => '#{user_agent}',
+            'Content-Type' => 'application/json'
+          ).map do |k, v|
           "\"#{k.to_s}\" => \"#{v.to_s}\""
         end.join(",\n        ") %>
     } }
