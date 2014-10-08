@@ -5,3 +5,5 @@ AllCops:
     - Guardfile
     - atum.gemspec
     - vendor/**/*
+    - spec/fixtures/fruity_client/**/*
+    - tmp/**/*
