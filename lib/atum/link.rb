@@ -134,8 +134,7 @@ module Atum
     end
 
     def unpack_url(url)
-      uri = URI.parse(url)
-      [url.gsub(uri.path, ''), uri.path]
+      [URI.join(url, '/').to_s, URI.parse(url).path]
     end
   end
 end
