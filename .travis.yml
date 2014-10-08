@@ -7,4 +7,3 @@ rvm:
 gemfile:
   - gemfiles/faraday_0.9.gemfile
   - gemfiles/faraday_0.8.9.gemfile
-
