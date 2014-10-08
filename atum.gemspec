@@ -34,4 +34,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'erubis', '~> 2.7'
   spec.add_dependency 'faraday', '>= 0.8.9'
   spec.add_dependency 'activesupport', '~> 4.1'
+  spec.add_dependency 'backports', '~> 3.6.3'
 end
