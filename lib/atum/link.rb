@@ -19,8 +19,7 @@ module Atum
     #     request made by the client.  Default is no custom headers.
     #     Default is no caching.
     def initialize(url, link_schema, options = {})
-      root_url, @path_prefix = unpack_url(url)
-      @connection = Faraday.new(url: root_url)
+      @connection = Faraday.new(url: url)
       @link_schema = link_schema
       @headers = options[:default_headers] || {}
     end
@@ -42,7 +41,6 @@ module Atum
       options[:body] = parameters.pop if @link_schema.needs_request_body?
 
       path = @link_schema.construct_path(*parameters)
-      path = "#{@path_prefix}#{path}" unless @path_prefix == '/'
 
       make_request(path, options)
     end
@@ -131,10 +129,6 @@ module Atum
 
     def unenvelope(body)
       body[@link_schema.resource_name.pluralize] || body['data']
-    end
-
-    def unpack_url(url)
-      [URI.join(url, '/').to_s, URI.parse(url).path]
     end
   end
 end
