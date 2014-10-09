@@ -12,7 +12,7 @@ module Atum
       end
 
       def request
-        response = Response.new(make_request(options))
+        response = Response.new(make_request)
         return response.body unless response.json?
 
         if response.limit.nil?
@@ -48,11 +48,7 @@ module Atum
       private
 
       def options
-        {
-          headers: @headers,
-          body: @body,
-          query: @query
-        }
+        { headers: @headers, body: @body, query: @query }
       end
     end
   end
