@@ -53,9 +53,7 @@ module Atum
       end
 
       def build_path(*parameters)
-        path = @link_schema.construct_path(*parameters)
-        path = "#{@path_prefix}#{path}" unless @path_prefix == '/'
-        path
+        @path_prefix + @link_schema.construct_path(*parameters)
       end
 
       def apply_link_schema(hash)
@@ -71,7 +69,8 @@ module Atum
       end
 
       def unpack_url(url)
-        [URI.join(url, '/').to_s, URI.parse(url).path]
+        path = URI.parse(url).path
+        [URI.join(url).to_s, path == '/' ? '' : path]
       end
     end
   end
