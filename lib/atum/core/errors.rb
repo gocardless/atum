@@ -1,12 +1,8 @@
 module Atum
   module Core
-    # Raised when a schema has an error that prevents it from being parsed
-    # correctly.
-    class SchemaError < StandardError
-    end
+    class SchemaError < StandardError; end
 
-    class ResponseError < StandardError
-    end
+    class ResponseError < StandardError; end
 
     class ApiError < StandardError
       attr_reader :error
