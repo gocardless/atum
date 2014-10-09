@@ -29,7 +29,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'webmock', '~> 1.18'
   spec.add_development_dependency 'pry-nav', '~> 0.2'
   spec.add_development_dependency 'yard', '~> 0.8'
-  spec.add_development_dependency 'appraisal', '~> 1.0.2'
 
   spec.add_dependency 'erubis', '~> 2.7'
   spec.add_dependency 'faraday', '>= 0.8.9'
