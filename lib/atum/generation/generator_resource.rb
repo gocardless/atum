@@ -17,7 +17,7 @@ module Atum
 
       # Links available on this resource.
       def links
-        @links ||= @resource_schema.links.map do |link_schema|
+        @links ||= @resource_schema.link_schemas.map do |link_schema|
           GeneratorLink.new(link_schema)
         end
       end

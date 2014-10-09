@@ -1,3 +1,10 @@
 language: ruby
+script: rubocop && rspec spec
 rvm:
-  - 1.9.3
+  - 2.0.0
+  - 2.0.0-p353
+  - 2.1
+gemfile:
+  - gemfiles/faraday_0.9.gemfile
+  - gemfiles/faraday_0.8.9.gemfile
+

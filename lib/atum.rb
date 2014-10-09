@@ -11,11 +11,5 @@ module Atum
 end
 
 require 'atum/version'
-require 'atum/errors'
-require 'atum/naming'
-require 'atum/link'
-require 'atum/resource'
-require 'atum/client'
-
-require 'atum/schemas'
+require 'atum/core'
 require 'atum/generation'

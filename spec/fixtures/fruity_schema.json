@@ -1,0 +1,161 @@
+{
+  "description": "A schema for a Fruity API",
+  "definitions": {
+    "lemon": {
+      "description": "For lovers of lemons, look no further.",
+      "id": "schema/lemon",
+      "$schema": "http://json-schema.org/draft-04/hyper-schema",
+      "title": "Lemons",
+      "type": ["object"],
+      "definitions": {
+        "picked_on": {
+          "description": "The date on which the lemon was picked",
+          "example": "2013-10-19 22:10:29Z",
+          "format": "date-time",
+          "readOnly": true,
+          "type": ["string"]
+        },
+        "size": {
+          "description": "The size of the lemon, 'small', 'medium' or 'large'",
+          "example": "small",
+          "readOnly": true,
+          "enum": ["small", "medium", "large"]
+        },
+        "is_ripe": {
+          "description": "Whether or not the lemon is ripe",
+          "example": true,
+          "type": ["boolean"]
+        },
+        "lemon_uuid": {
+          "description": "A unique uuid reference for the lemon",
+          "example": "44724831-bf66-4bc2-865f-e2c4c2b14c78",
+          "format": "uuid",
+          "readOnly": true,
+          "type": ["string"]
+        },
+        "identity": {
+          "oneOf": [
+            { "$ref": "#/definitions/lemon/definitions/lemon_uuid" }
+          ]
+        }
+      },
+      "properties": {
+        "picked_on": { "$ref": "#/definitions/lemon/definitions/picked_on" },
+        "size": { "$ref": "#/definitions/lemon/definitions/size" },
+        "is_ripe": { "$ref": "#/definitions/lemon/definitions/is_ripe" },
+        "lemon_uuid": { "$ref": "#/definitions/lemon/definitions/lemon_uuid" }
+      },
+      "links": [
+        {
+          "description": "List all Lemons",
+          "href": "/lemon",
+          "method": "GET",
+          "rel": "instances",
+          "title": "List",
+          "schema": {
+            "type": ["object"],
+            "properties": {
+              "size": {
+                "type": ["array", "string"],
+                "items": { "$ref": "#/definitions/lemon/definitions/size" },
+                "maxItems": 2
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        {
+          "description": "Show a single Lemon",
+          "href": "/lemon/{(%23%2Fdefinitions%2Flemon%2Fdefinitions%2Flemon_uuid)}",
+          "method": "GET",
+          "rel": "self",
+          "title": "Info"
+        },
+        {
+          "description": "Create a new Lemon",
+          "href": "/lemon",
+          "method": "POST",
+          "rel": "create",
+          "title": "Create",
+          "schema": {
+            "properties": {
+              "picked_on": { "$ref": "#/definitions/lemon/definitions/picked_on" },
+              "size": { "$ref": "#/definitions/lemon/definitions/size" },
+              "is_ripe": { "$ref": "#/definitions/lemon/definitions/is_ripe" },
+              "lemon_uuid": { "$ref": "#/definitions/lemon/definitions/lemon_uuid" }
+            }
+          }
+        },
+        {
+          "description": "Update a sample lemon",
+          "href": "/lemon/{(%23%2Fdefinitions%2Flemon%2Fdefinitions%2Flemon_uuid)}",
+          "method": "PATCH",
+          "rel": "update",
+          "title": "Update",
+          "schema": {
+            "properties": {
+              "picked_on": { "$ref": "#/definitions/lemon/definitions/picked_on" },
+              "size": { "$ref": "#/definitions/lemon/definitions/size" },
+              "is_ripe": { "$ref": "#/definitions/lemon/definitions/is_ripe" },
+              "lemon_uuid": { "$ref": "#/definitions/lemon/definitions/lemon_uuid" }
+            }
+          }
+        },
+        {
+          "description": "Delete a whole size of lemons, you murderer",
+          "href": "/lemon/{(%23%2Fdefinitions%2Flemon%2Fdefinitions%2Fsize)}",
+          "method": "DELETE",
+          "rel": "destroy",
+          "title": "Delete"
+        }
+      ]
+    },
+    "lime": {
+      "description": "Like lemons, but not as good",
+      "id": "schema/lime",
+      "$schema": "http://json-schema.org/draft-04/hyper-schema",
+      "title": "Limes < Lemons",
+      "type": ["object"],
+      "definitions": {
+        "picked_on": {
+          "description": "The date on which the lime was picked",
+          "example": "2013-10-19 22:10:29Z",
+          "format": "date-time",
+          "readOnly": true,
+          "type": ["string"]
+        },
+        "lime_uuid": {
+          "description": "A unique uuid reference for the lime",
+          "example": "44724831-bf66-4bc2-865f-e2c4c2b14c78",
+          "format": "uuid",
+          "readOnly": true,
+          "type": ["string"]
+        },
+        "identity": {
+          "oneOf": [
+            { "$ref": "#/definitions/lime/definitions/lime_uuid" }
+          ]
+        }
+      },
+      "properties": {
+        "picked_on": { "$ref": "#/definitions/lime/definitions/picked_on" },
+        "lime_uuid": { "$ref": "#/definitions/lime/definitions/lime_uuid" }
+      },
+      "links": [
+        {
+          "description": "List all Limes",
+          "href": "/lime",
+          "method": "GET",
+          "rel": "instances",
+          "title": "List"
+        }
+      ]
+    }
+  },
+  "properties": {
+    "lemon": { "$ref": "#/definitions/lemon" },
+    "lime": { "$ref": "#/definitions/lime" }
+  }
+}
+
+

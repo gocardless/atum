@@ -35,15 +35,7 @@ end
 options = { default_headers: options[:headers] }
 
 module_name, schema_filename, url = ARGV
-schema = Atum::Schemas::ApiSchema.new(JSON.parse(File.read(schema_filename)))
-generator = Atum::Generation::ClientGenerator.new(module_name, schema, url,
-                                                  options)
 
-begin
-  generator.files.each do |filename, contents|
-    File.open("#{filename}.rb", 'w') { |f| f.write(contents) }
-  end
-rescue
-  puts 'Error writing output!'
-  raise
-end
+generator = Atum::Generation::GeneratorService.new(module_name, schema_filename,
+                                                   url, options)
+generator.generate_files
