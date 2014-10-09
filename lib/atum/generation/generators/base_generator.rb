@@ -28,9 +28,7 @@ module Atum
         end
 
         def template
-          @template ||= begin
-            Erubis::Eruby.new(File.read(template_path))
-          end
+          @template ||= Erubis::Eruby.new(File.read(template_path))
         end
 
         def generate
@@ -49,8 +47,7 @@ module Atum
         end
 
         def template_name
-          raise(GeneratorError, 'Template Not Defined') if self.class::TEMPLATE_NAME.nil?
-          self.class::TEMPLATE_NAME
+          raise NotImplementedError, 'Must be defined in subclasses'
         end
       end
     end

@@ -19,7 +19,7 @@
           "description": "The size of the lemon, 'small', 'medium' or 'large'",
           "example": "small",
           "readOnly": true,
-          "type": ["string"]
+          "enum": ["small", "medium", "large"]
         },
         "is_ripe": {
           "description": "Whether or not the lemon is ripe",

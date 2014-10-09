@@ -87,7 +87,7 @@ module Atum
         def generate_parameter(param)
           path = param.split('/')[1..-1]
           name = path[-1]
-          resource_name = path.size > 2 ? path[1].gsub('-', '_') : nil
+          resource_name = path.size > 2 ? path[1] : nil
           info = @api_schema.lookup_path(*path)
           description = info['description']
 

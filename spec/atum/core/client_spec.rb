@@ -14,9 +14,7 @@ describe Atum::Core::Client do
     subject(:command) { -> { client.unknown_resource } }
 
     context 'without a matching resource' do
-      it do
-        is_expected.to raise_error(NoMethodError)
-      end
+      it { is_expected.to raise_error(NoMethodError) }
     end
   end
 

@@ -17,7 +17,7 @@ module Atum
         #
         # @param name [String] The name of the resource.
         # @raise [SchemaError] Raised if an unknown resource name is provided.
-        # @return ResourceSchema Te resource schema for resource called name
+        # @return ResourceSchema The resource schema for resource called name
         def resource_schema_for(name)
           unless resource_schema_hash.key?(name)
             raise SchemaError, "Unknown resource '#{name}'."

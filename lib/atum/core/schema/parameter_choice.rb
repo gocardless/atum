@@ -22,10 +22,6 @@ module Atum
             end
           end.join('_or_')
         end
-
-        def inspect
-          "ParameterChoice(parameters=#{@parameters})"
-        end
       end
     end
   end

@@ -14,16 +14,8 @@ module Atum
           @definition = definition
         end
 
-        def description
-          @definition['description']
-        end
-
-        def definitions
-          @definition['definitions']
-        end
-
-        def properties
-          @definition['properties']
+        %w(description definitions properties).each do |key|
+          define_method(key) { @definition[key] }
         end
 
         # Get a schema for a named link.

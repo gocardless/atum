@@ -28,12 +28,14 @@ describe Atum::Generation::Generators::BaseGenerator do
   describe '#template' do
     context 'when TEMPLATE_NAME is not defined' do
       subject(:method) { -> { generator.template } }
-      it { is_expected.to raise_error(Atum::Generation::GeneratorError) }
+      it { is_expected.to raise_error(NotImplementedError) }
     end
 
     context 'when TEMPLATE_NAME is defined' do
       let(:template_name) { 'foobar' }
-      before { stub_const("#{described_class}::TEMPLATE_NAME", template_name) }
+      before do
+        allow(generator).to receive(:template_name).and_return(template_name)
+      end
 
       it 'should attempt to read the file' do
         expect(File).to receive(:read) do |arg|

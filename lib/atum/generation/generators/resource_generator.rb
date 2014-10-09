@@ -2,8 +2,6 @@ module Atum
   module Generation
     module Generators
       class ResourceGenerator < BaseGenerator
-        TEMPLATE_NAME = 'resource'
-
         def initialize(resource, *args)
           super(*args)
           @resource = resource
@@ -16,6 +14,10 @@ module Atum
           c[:links] = @resource.links
           c[:resource_name] = @resource.name
           c
+        end
+
+        def template_name
+          'resource'
         end
       end
     end
