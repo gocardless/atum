@@ -74,6 +74,18 @@ rescue Faraday::ClientError => error
 end
 ```
 
+## Supporting Ruby < 2.0.0
+This gem only directly supports Ruby >= 2.0.0 out of the box due to our use of
+Enumerable::Lazy for lazy loading of paginated API resources.
+
+However, support for previous ruby versions can be added using a gem such as
+[backports](https://github.com/marcandre/backports).
+
+1. Add backports to your Gemfile
+   ```gem 'backports'```
+2. Require lazy enumerables
+   ```require 'backports/2.0.0/enumerable/lazy.rb'```
+
 ## Contributing
 
 1. [Fork the repository](https://github.com/isaacseymour/atum/fork)
