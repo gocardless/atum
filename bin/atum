@@ -38,5 +38,4 @@ module_name, schema_filename, url = ARGV
 
 generator = Atum::Generation::GeneratorService.new(module_name, schema_filename,
                                                    url, options)
-generator.generate_namespace_folder
 generator.generate_files
