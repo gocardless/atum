@@ -5,7 +5,7 @@ describe 'The Generated Client' do
   let(:schema_file) do
     File.expand_path('../fixtures/fruity_schema.json', File.dirname(__FILE__))
   end
-  let(:url) { 'http://api.fruity.com/fruits' }
+  let(:url) { 'http://USER:PASSWORD@api.fruity.com/fruits' }
   let(:tmp_folder) do
     File.expand_path(File.join('..', '..', '..', 'tmp'), File.dirname(__FILE__))
   end
@@ -17,17 +17,9 @@ describe 'The Generated Client' do
   before do
     generator_service.generate_files
     require File.join(options[:path], 'fruity')
-    Fruity.connect('PASSWORD', user: 'USER_ID', url: url)
+    Fruity.connect('PASSWORD', user: 'USER', url: url)
   end
   after { FileUtils.rm_rf(tmp_folder) }
-
-  it 'should add Authorization headers' do
-    stub = WebMock.stub_request(:get, "#{url}/lemon") do |args|
-      expect(args[:headers]).to include('Authorization' => anything)
-    end
-    Fruity.lemon.list
-    expect(stub).to have_been_requested
-  end
 
   it 'can make get requests' do
     stub = WebMock.stub_request(:get, "#{url}/lemon")
@@ -45,8 +37,8 @@ describe 'The Generated Client' do
   it 'can make requests with custom headers' do
     headers = { 'Accept' => 'application/json', 'Api-Version' => '2014-09-01',
                 'Content-Type' => 'application/json' }
-    stub = WebMock.stub_request(:get, "#{url}/lemon") do |args|
-      expect(args[:headers]).to include(headers)
+    stub = WebMock.stub_request(:get, "#{url}/lemon").with do |request|
+      expect(request.headers).to include(headers)
     end
     Fruity.lemon.list(headers: headers)
     expect(stub).to have_been_requested

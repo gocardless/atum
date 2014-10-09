@@ -37,7 +37,7 @@ module Atum
           request.url @path
           request.body = body
           request.params = query
-          request.headers = headers
+          request.headers.merge!(headers)
         end
       end
 
