@@ -27,20 +27,10 @@ module Atum
       # @param resources [Hash<String,Resource>] Methods names -> Resources
       # @param url [String] The URL used by this client.
       def initialize(resources, url)
-        @resources = resources
         @url = url
-      end
-
-      def method_missing(method)
-        unless respond_to?(method)
-          raise NoMethodError, "resource `#{method}' doesn't exist for #{self}"
+        resources.each do |name, resource|
+          define_singleton_method(name) { resource }
         end
-
-        get_resource(method.to_s)
-      end
-
-      def respond_to?(method)
-        @resources.key?(method.to_s)
       end
 
       def inspect
@@ -50,15 +40,6 @@ module Atum
       end
 
       alias_method :to_s, :inspect
-
-      private
-
-      # @param name [String] The name of the resource to find.
-      # @raise [NoMethodError] Raised if the name doesn't match a known resource.
-      # @return [Resource] The resource matching the name.
-      def get_resource(name)
-        @resources[name]
-      end
     end
   end
 end
