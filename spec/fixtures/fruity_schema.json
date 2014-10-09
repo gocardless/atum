@@ -51,7 +51,18 @@
           "href": "/lemon",
           "method": "GET",
           "rel": "instances",
-          "title": "List"
+          "title": "List",
+          "schema": {
+            "type": ["object"],
+            "properties": {
+              "size": {
+                "type": ["array", "string"],
+                "items": { "$ref": "#/definitions/lemon/definitions/size" },
+                "maxItems": 2
+              }
+            },
+            "additionalProperties": false
+          }
         },
         {
           "description": "Show a single Lemon",

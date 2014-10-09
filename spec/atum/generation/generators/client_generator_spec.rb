@@ -14,17 +14,17 @@ describe Atum::Generation::Generators::ClientGenerator do
     let(:schema) { double(description: description) }
 
     before do
-      allow(Atum::Generation::ErbContext).to receive(:new)
-        .and_return(erb_context)
       allow(generator).to receive(:resources).and_return(resources)
     end
 
     it 'sets the description on the context' do
-      expect(generator.context).to include(description: description)
+      expect(generator.context.to_hash.with_indifferent_access)
+        .to include(description: description)
     end
 
     it 'sets the resources on the context' do
-      expect(generator.context).to include(resources: resources)
+      expect(generator.context.to_hash.with_indifferent_access)
+        .to include(resources: resources)
     end
   end
 end

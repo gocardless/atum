@@ -11,8 +11,7 @@ describe Atum::Generation::Generators::BaseGenerator do
     let(:erb_context) { {} }
 
     before do
-      allow(Atum::Generation::ErbContext).to receive(:new)
-        .and_return(erb_context)
+      allow(generator).to receive(:context_hash).and_return(erb_context)
     end
 
     it 'generates a new ErbContext' do
@@ -21,7 +20,8 @@ describe Atum::Generation::Generators::BaseGenerator do
     end
 
     it 'sets the module name' do
-      expect(generator.context).to include(module_name: module_name)
+      expect(generator.context.to_hash.with_indifferent_access)
+        .to include(module_name: module_name)
     end
   end
 

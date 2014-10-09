@@ -22,9 +22,11 @@ module Atum
         end
 
         def context
-          c = ErbContext.new
-          c[:module_name] = @module_name
-          c
+          ErbContext.new(context_hash.merge(module_name: @module_name))
+        end
+
+        def context_hash
+          raise NotImplementedError, 'Subclasses must define context_hash'
         end
 
         def template
@@ -47,7 +49,7 @@ module Atum
         end
 
         def template_name
-          raise NotImplementedError, 'Must be defined in subclasses'
+          raise NotImplementedError, 'Subclasses must define template_name'
         end
       end
     end

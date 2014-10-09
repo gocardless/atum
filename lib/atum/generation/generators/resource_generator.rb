@@ -7,13 +7,11 @@ module Atum
           @resource = resource
         end
 
-        def context
-          c = super
-          c[:description] = @resource.description
-          c[:class_name] = @resource.class_name
-          c[:links] = @resource.links
-          c[:resource_name] = @resource.name
-          c
+        def context_hash
+          { description: @resource.description,
+            class_name: @resource.class_name,
+            links: @resource.links,
+            resource_name: @resource.name }
         end
 
         def template_name

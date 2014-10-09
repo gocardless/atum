@@ -23,25 +23,24 @@ describe Atum::Generation::Generators::ResourceGenerator do
   describe '#context' do
     let(:erb_context) { {} }
 
-    before do
-      allow(Atum::Generation::ErbContext).to receive(:new)
-        .and_return(erb_context)
-    end
-
     it 'sets the description on the context' do
-      expect(generator.context).to include(description: description)
+      expect(generator.context.to_hash.with_indifferent_access)
+        .to include(description: description)
     end
 
     it 'sets the class_name on the context' do
-      expect(generator.context).to include(class_name: class_name)
+      expect(generator.context.to_hash.with_indifferent_access)
+        .to include(class_name: class_name)
     end
 
     it 'sets the links on the context' do
-      expect(generator.context).to include(links: links)
+      expect(generator.context.to_hash.with_indifferent_access)
+        .to include(links: links)
     end
 
     it 'sets the resource_name on the context' do
-      expect(generator.context).to include(resource_name: resource_name)
+      expect(generator.context.to_hash.with_indifferent_access)
+        .to include(resource_name: resource_name)
     end
   end
 end
