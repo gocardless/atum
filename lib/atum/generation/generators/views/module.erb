@@ -40,11 +40,11 @@ module <%= @module_name %>
   #   `cache`, `user` and `url`.
   # @return [Client] A client configured to use the API with HTTP Basic
   #   authentication.
-  def self.connect(api_key, options = nil)
+  def self.connect(url, user, password, options = {})
     options = self.custom_options(options)
-    uri = URI.parse(options[:url])
-    uri.user = options.fetch(:user, 'user').gsub('@', '%40')
-    uri.password = api_key
+    uri = URI.parse(url)
+    uri.user = user.gsub('@', '%40')
+    uri.password = password
     client = Atum::Core::Client.client_from_schema(SCHEMA, uri.to_s, options)
     @client = Client.new(client)
   end

@@ -17,7 +17,7 @@ describe 'The Generated Client' do
   before do
     generator_service.generate_files
     require File.join(options[:path], 'fruity')
-    Fruity.connect('PASSWORD', user: 'USER', url: url)
+    Fruity.connect(url, 'USER', 'PASSWORD')
   end
   after { FileUtils.rm_rf(tmp_folder) }
 
