@@ -24,7 +24,7 @@ in Atum's spec fixtures
 
 #### 1. Create a New Gem
 
-To generate a new rubygem client, you can run:
+To generate a new rubygem client (for our ficitional *Fruity* API), you can run:
 
 ```
 $ atum new fruity-api
@@ -32,11 +32,11 @@ $ atum new fruity-api
 
 This will does several things:
 
-- Createa a new gem called fruity-api in a `fruity-api` folder in the current
+- Creates a new gem called `fruity-api` in a `fruity-api` folder in the current
    directory
 
    ```
-> atum new fruity-api
+$ atum new fruity-api
       create  fruity-api/Gemfile
       create  fruity-api/Rakefile
       create  fruity-api/LICENSE.txt
@@ -74,13 +74,13 @@ If your client needs to pass custom headers with each request these can be
 specified using `--default-headers or -H`:
 
 ```
-atum generate -H 'Accept: application/vnd.myapp+json; version=3'
+$ atum generate -H 'Accept: application/vnd.myapp+json; version=3'
 ```
 
 To pass multiple headers, just give multiple strings:
 
 ```
-atum generate -H 'header1' 'header2' 'header3'
+$ atum generate -H 'header1' 'header2' 'header3'
 ```
 
 You can also define a default\_headers section in your .atum.yml file.
@@ -96,7 +96,7 @@ default_headers:
 The generated client has [Yard](http://yardoc.org/)-compatible docstrings. You can therefore generate documentation using `yard`:
 
 ```
-yard doc -m markdown .
+$ yard doc -m markdown .
 ```
 
 This will generate HTML in the `docs` directory.  Note that Yard creates an
