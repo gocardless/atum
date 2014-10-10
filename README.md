@@ -131,7 +131,7 @@ Assuming the error response form the server is in JSON format, like:
 }
 ```
 
-Atum will return an Atum::Core::ApiError error. You can access the raw hash (unenveloped) via a `.errors` method, otherwise the error message will contain the error's message and a link to the documentation if it exists.
+Atum will return an Atum::Core::ApiError error. You can access the raw hash (unenveloped) via a `.errors` method, by default the error message will contain the error's message and a link to the documentation if it exists.
 
 
 
