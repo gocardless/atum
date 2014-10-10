@@ -7,7 +7,7 @@ describe 'The Generated Client' do
   end
   let(:url) { 'http://USER:PASSWORD@api.fruity.com/fruits' }
   let(:tmp_folder) do
-    File.expand_path(File.join('..', '..', '..', 'tmp'), File.dirname(__FILE__))
+    File.expand_path(File.join('..', '..', 'tmp'), File.dirname(__FILE__))
   end
   let(:options) { { path: File.join(tmp_folder, 'client') } }
   let(:generator_service) do
@@ -16,10 +16,11 @@ describe 'The Generated Client' do
 
   before do
     generator_service.generate_files
+    p options
     require File.join(options[:path], 'fruity')
     Fruity.connect(url, 'USER', 'PASSWORD')
   end
-  after { FileUtils.rm_rf(tmp_folder) }
+  after { FileUtils.rm_rf(options[:path]) }
 
   it 'can make get requests' do
     stub = WebMock.stub_request(:get, "#{url}/lemon")
