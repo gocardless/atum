@@ -33,7 +33,6 @@ module Atum
              aliases: '-H',
              desc: 'A comma separated list of headers, ' \
                    'e.g. Api-Version: 2010-10-03, Accept-Language: Fr',
-             default: '',
              type: 'array'
       option :constant_name, desc: 'e.g. FruityApi'
       option :file
@@ -105,7 +104,7 @@ module Atum
           Dir.chdir('lib') do
             Atum::Generation::GeneratorService.new(
               config['constant_name'], config['file'], config['url'],
-              default_headers: parse_headers(options['default_headers'])
+              default_headers: parse_headers(config['default_headers'])
             ).generate_files
           end
         end
