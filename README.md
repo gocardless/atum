@@ -11,39 +11,92 @@ from [Heroics](https://github.com/interagent/heroics).
 
 ## Usage
 
-### Generating a client
+### Generating Clients
 
 Atum generates an HTTP client from a JSON schema that describes your JSON
 API. Look at [prmd](https://github.com/interagent/prmd) for tooling to help
 write a JSON schema.  When you have a JSON schema prepared you can generate a
-client for your API:
+client for your API.
+
+To see a simple example, you can look at the [Fruity API json
+schema](https://github.com/gocardless/atum/blob/master/spec/fixtures/fruity_schema.json)
+in Atum's spec fixtures
+
+#### 1. Create a New Gem
+
+To generate a new rubygem client, you can run:
 
 ```
-$ atum MyApp schema.json https://api.myapp.com
+$ atum new fruity-api
 ```
 
-This will output a client into a new `my_app` folder, in the current directory,
-unless that folder exists.
+This will does several things:
+
+- Createa a new gem called fruity-api in a `fruity-api` folder in the current
+   directory
+
+   ```
+> atum new fruity-api
+      create  fruity-api/Gemfile
+      create  fruity-api/Rakefile
+      create  fruity-api/LICENSE.txt
+      create  fruity-api/README.md
+      create  fruity-api/.gitignore
+      create  fruity-api/fruity-api.gemspec
+      create  fruity-api/lib/fruity/api.rb
+      create  fruity-api/lib/fruity/api/version.rb
+Initializing git repo in /Users/petehamilton/projects/atum/fruity-api
+    ```
+- Creates a `.atum.yml` file in the root of the gem and populate it with:
+   ```
+   gem_name: fruity-api
+   constant_name: FruityApi
+   ```
+   You can add more configuration options to this file to prevent having to add
+   lots of command line arguments later. See below.
+
+#### 2. Generate the client files
+
+Now you have a gem, you need to populate the lib directory. To do this, navigate
+to the root of your gem and run:
+
+```
+$ atum generate --file PATH_TO_SCHEMA --url API_URL
+```
+
+*Note: You can store the file and url config in your .atum.yml file for
+convenience*
+
 
 ### Passing custom headers
 
 If your client needs to pass custom headers with each request these can be
-specified using `-H`:
+specified using `--default-headers or -H`:
 
 ```
-atum -H "Accept: application/vnd.myapp+json; version=3" MyApp schema.json https://api.myapp.com
+atum generate -H 'Accept: application/vnd.myapp+json; version=3'
 ```
 
-Pass multiple `-H` options if you need more than one custom header.
+To pass multiple headers, just give multiple strings:
+
+```
+atum generate -H 'header1' 'header2' 'header3'
+```
+
+You can also define a default\_headers section in your .atum.yml file.
+
+```
+default_headers:
+  - Accept: application/vnd.myapp+json; version=3
+  - Accept-Language: Fr
+```
 
 ### Generating API documentation
 
-The generated client has [Yard](http://yardoc.org/)-compatible docstrings.
-You can generate documentation using `yard`:
+The generated client has [Yard](http://yardoc.org/)-compatible docstrings. You can therefore generate documentation using `yard`:
 
-<!--- not convinced this is actually correct now it's a directory? -->
 ```
-yard doc -m markdown my_app
+yard doc -m markdown .
 ```
 
 This will generate HTML in the `docs` directory.  Note that Yard creates an
@@ -53,21 +106,37 @@ through Jekyll.
 
 ### Handling failures
 
-The client uses [Faraday](https://github.com/lostisland/faraday) for doing the
-HTTP requests, which chooses the most appropriate library for the runtime and
-other cool things. As such, you may encounter Faraday errors, which are mostly
-subclasses of `Faraday::ClientError`.
+When an API returns an error, Atum will return an `ApiError`.
 
-```ruby
-begin
-  client.app.create('name' => 'example')
-rescue Faraday::ClientError => error
-  puts error
-end
+Assuming the error response form the server is in JSON format, like:
+
+```
+{
+  "error": {
+    "documentation_url": "https://developer.gocardless.com/enterprise#validation_failed",
+    "message": "Validation failed",
+    "type": "validation_failed",
+    "code": 422,
+    "request_id": "dd50eaaf-8213-48fe-90d6-5466872efbc4",
+    "errors": [
+      {
+        "message": "must be a number",
+        "field": "sort_code"
+      }, {
+        "message": "is the wrong length (should be 8 characters)",
+        "field": "sort_code"
+      }
+    ]
+  }
+}
 ```
 
+Atum will return an Atum::Core::ApiError error. You can access the raw hash (unenveloped) via a `.errors` method, otherwise the error message will contain the error's message and a link to the documentation if it exists.
+
+
+
 ## Supporting Ruby < 2.0.0
-This gem only directly supports Ruby >= 2.0.0 out of the box due to our use of
+Atum only supports Ruby >= 2.0.0 out of the box due to our use of
 Enumerable::Lazy for lazy loading of paginated API resources.
 
 However, support for previous ruby versions can be added using a gem such as
