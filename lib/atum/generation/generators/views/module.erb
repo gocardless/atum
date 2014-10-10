@@ -13,10 +13,10 @@ module <%= @module_name.split("::")[0..i].join("::") %>; end
 <% end %>
 
 version_file = '<%= @module_name.downcase.underscore.split("/").last %>/version'
-if File.file?(version_file)
-require version_file
+if File.file? File.expand_path("#{version_file}.rb", File.dirname(__FILE__))
+  require_relative version_file
 else
-<%= "#{@module_name}::VERSION" %> = ''
+  <%= "#{@module_name}::VERSION" %> = ''
 end
 require_relative '<%= @module_name.downcase.underscore.split("/").last %>/client'
 <% @resources.each do |resource| %>

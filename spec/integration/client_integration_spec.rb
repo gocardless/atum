@@ -13,14 +13,17 @@ describe 'The Generated Client' do
   let(:generator_service) do
     Atum::Generation::GeneratorService.new(name, schema_file, url, options)
   end
+  let(:pre_generation_setup) { -> { generator_service.generate_files } }
 
-  before do
-    generator_service.generate_files
-    p options
-    require File.join(options[:path], 'fruity')
+  around(:each) do |example|
+    pre_generation_setup.call
+    load File.join(options[:path], 'fruity.rb')
     Fruity.connect(url, 'USER', 'PASSWORD')
+    example.run
+    Fruity.send(:remove_const, 'VERSION')
+    Fruity.send(:remove_const, 'SCHEMA')
+    FileUtils.rm_rf(options[:path])
   end
-  after { FileUtils.rm_rf(options[:path]) }
 
   it 'can make get requests' do
     stub = WebMock.stub_request(:get, "#{url}/lemon")
@@ -88,5 +91,30 @@ describe 'The Generated Client' do
     WebMock.stub_request(:post, "#{url}/lemon")
       .with(body: body.to_json)
     expect(Fruity.lemon.create(body: body))
+  end
+
+  context "when a version file doesn't exist" do
+    it "doesn't define VERSION" do
+      expect(Fruity::VERSION).to eq('')
+    end
+  end
+
+  context 'when a version file exists' do
+    let(:version) { '1.2.3' }
+    let(:pre_generation_setup) do
+      lambda do
+        generator_service.generate_files
+        file = File.expand_path(File.join(options[:path], 'fruity', 'version.rb'))
+        File.open(file, 'w') do |f|
+          f.write "module #{name}\n"
+          f.write "  VERSION = '#{version}'\n"
+          f.write 'end'
+        end
+      end
+    end
+
+    it 'includes a version file for the client when one exists' do
+      expect(Fruity::VERSION).to eq(version)
+    end
   end
 end
