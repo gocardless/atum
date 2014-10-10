@@ -45,7 +45,7 @@ module Atum
         validate_config(config)
 
         names = name_versions(config['gem_name'])
-        config['constant_name'] = names[:constant_name]
+        config['constant_name'] ||= names[:constant_name]
 
         # Preserve the version file
         version_file = File.join('lib', names[:namespaced_path], 'version.rb')
