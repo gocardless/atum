@@ -16,14 +16,11 @@ module Atum
 
       def break_line(line, max_line_length)
         line.split.reduce([]) do |lines, word|
-          if lines.empty?
-            lines = [word]
-          elsif (lines[-1] + " #{word}").size > max_line_length
+          if lines.empty? || (lines[-1] + " #{word}").size > max_line_length
             lines << word
           else
-            lines[-1] << " #{word}"
+            lines[-1] << " #{word}" && lines
           end
-          lines
         end
       end
     end
