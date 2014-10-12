@@ -18,9 +18,16 @@ module Atum
       #   include:
       #   - default_headers: Optionally, a set of headers to include in every
       #     request made by the client.  Default is no custom headers.
+      #   - http_adapter: Optionally, the http adapter to use; for now we accept
+      #     adapters according to Faraday's builder:
+      #     https://github.com/lostisland/faraday/blob/v0.8.9/lib/faraday/builder.rb
+      #     e.g. http_adapter: [:rack, Rails.application]
       def initialize(url, link_schema, options = {})
         root_url, @path_prefix = unpack_url(url)
-        @connection = Faraday.new(url: root_url)
+        http_adapter = options[:http_adapter] || [:net_http]
+        @connection = Faraday.new(url: root_url) do |faraday|
+          faraday.adapter(*http_adapter)
+        end
         @link_schema = link_schema
         @headers = options[:default_headers] || {}
       end
