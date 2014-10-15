@@ -117,4 +117,18 @@ describe 'The Generated Client' do
       expect(Fruity::VERSION).to eq(version)
     end
   end
+
+  context 'when using a :test http_adapter' do
+    before do
+      stubs = Faraday::Adapter::Test::Stubs.new do |stub|
+        stub.get("#{url}/lemon") { |_| [200, {}, 5] }
+      end
+      Fruity.connect(url, 'USER', 'PASSWORD',
+                     http_adapter: [:test, stubs])
+    end
+
+    it 'uses the defined stubs' do
+      expect(Fruity.lemon.list).to eq(5)
+    end
+  end
 end
