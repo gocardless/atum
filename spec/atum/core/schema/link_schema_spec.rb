@@ -83,6 +83,11 @@ describe Atum::Core::Schema::LinkSchema do
       it { is_expected.to raise_error(ArgumentError) }
     end
 
+    it 'URL encodes href params' do
+      expect(update.construct_path('MD00006N30R4F0>'))
+        .to eq('/resource/MD00006N30R4F0%3E')
+    end
+
     it 'returns relative url' do
       expect(update.construct_path('4472831-bf66-4bc2-865f-e2c4c2b14c78'))
         .to eq('/resource/4472831-bf66-4bc2-865f-e2c4c2b14c78')
