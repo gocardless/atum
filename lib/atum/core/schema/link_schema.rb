@@ -58,6 +58,8 @@ module Atum
                                  "for #{expected_params.count}"
           end
 
+          params.map! { |param| URI.escape(param) }
+
           href.gsub(PARAMETER_REGEX) { |_match| format_parameter(params.shift) }
         end
 
