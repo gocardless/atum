@@ -35,7 +35,7 @@ describe Atum::Core::Response do
                  body: 'FOOBARBAZ', status: 400)
         end
 
-        it "should raise an error" do
+        it 'should raise an error' do
           expect { api_response.body }.to raise_error(Atum::Core::ApiError)
         end
       end
