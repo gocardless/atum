@@ -46,7 +46,13 @@ module Atum
       end
 
       def handle_raw
-        error? ? raise(ApiError) : raw_body
+        default_raw_message = {
+          "message" => "Something went wrong with this raw request\n" +
+          "status: #{@response.status}\n" +
+          "headers: #{@response.headers}\n" +
+          "body: #{@response.body}"
+        }
+        error? ? raise(ApiError, default_raw_message) : raw_body
       end
     end
   end
