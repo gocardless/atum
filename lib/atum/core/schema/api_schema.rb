@@ -50,11 +50,10 @@ module Atum
         private
 
         def resource_schema_hash
-          @resource_schema_hash ||= Hash[
-            @schema['definitions'].map do |key, value|
-              [key, ResourceSchema.new(self, value, key)]
+          @resource_schema_hash ||=
+            @schema['definitions'].each_with_object({}) do |(key, value), memo|
+              memo[key] = ResourceSchema.new(self, value, key)
             end
-          ]
         end
       end
     end

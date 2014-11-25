@@ -38,12 +38,11 @@ module Atum
         private
 
         def link_schema_hash
-          @link_schema_hash ||= Hash[
-            @definition['links'].map do |link|
-              [link['title'].downcase.gsub(' ', '_'),
-               LinkSchema.new(@schema, self, link)]
+          @link_schema_hash ||=
+            @definition['links'].each_with_object({}) do |link, memo|
+              memo[link['title'].downcase.gsub(' ', '_')] =
+                LinkSchema.new(@schema, self, link)
             end
-          ]
         end
       end
     end

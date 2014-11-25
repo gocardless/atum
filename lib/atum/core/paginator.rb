@@ -19,9 +19,9 @@ module Atum
             break if items.count < response.limit
 
             new_options = @options.dup
-            new_options[:query] = @options.fetch(:query, {})
-            new_options[:query].merge!(after: response.meta['cursors']['after'],
-                                       limit: response.limit + LIMIT_INCREMENT)
+            new_options[:query] = @options.fetch(:query, {}).merge(
+              after: response.meta['cursors']['after'],
+              limit: response.limit + LIMIT_INCREMENT)
 
             response = @request.make_request(new_options)
           end
