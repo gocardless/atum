@@ -36,7 +36,8 @@ describe Atum::Core::Response do
         end
 
         it 'should raise an error' do
-          expect { api_response.body }.to raise_error(Atum::Core::ApiError)
+          expect { api_response.body }.to raise_error(Atum::Core::ApiError,
+                                                      /FOOBARBAZ/)
         end
       end
     end
