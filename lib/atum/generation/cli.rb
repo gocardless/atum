@@ -128,9 +128,10 @@ module Atum
         def name_versions(name)
           constant_name = name.split('_').map { |p| p[0..0].upcase + p[1..-1] }.join
           if constant_name =~ /-/
-            constant_name = constant_name.split('-')
-                                         .map { |q| q[0..0].upcase + q[1..-1] }
-                                         .join('::')
+            constant_name = constant_name
+                            .split('-')
+                            .map { |q| q[0..0].upcase + q[1..-1] }
+                            .join('::')
           end
 
           { underscored_name: name.tr('-', '_'),
