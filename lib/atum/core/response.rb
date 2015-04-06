@@ -12,7 +12,7 @@ module Atum
       def json?
         content_type = @response.headers['Content-Type'] ||
                        @response.headers['content-type'] || ''
-        content_type.include?('application/json')
+        content_type =~ %r{application/.*json}
       end
 
       def error?

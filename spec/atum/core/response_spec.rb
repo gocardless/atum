@@ -7,10 +7,21 @@ describe Atum::Core::Response do
   describe '#body' do
     subject(:body) { api_response.body }
 
-    context 'when the response is json' do
+    context 'when the response is a simple json type' do
       let(:response_body) { { name: 'thing', description: 'awesome thing' } }
       let(:response) do
         double(headers: { 'Content-Type' => 'application/json' },
+               body: { 'thing' => response_body }.to_json,
+               status: 200)
+      end
+
+      it { is_expected.to be_a(Hash) }
+    end
+
+    context 'when the response is a custom json type' do
+      let(:response_body) { { name: 'thing', description: 'awesome thing' } }
+      let(:response) do
+        double(headers: { 'Content-Type' => 'application/vnd.api+json' },
                body: { 'thing' => response_body }.to_json,
                status: 200)
       end
