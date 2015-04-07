@@ -6,7 +6,15 @@ module Atum
       end
 
       def body
-        json? ? handle_json : handle_raw
+        json? ? json_body : raw_body
+      end
+
+      def status
+        @response.status
+      end
+
+      def headers
+        @response.headers
       end
 
       def json?
@@ -39,20 +47,6 @@ module Atum
 
       def raw_body
         @response.body
-      end
-
-      def handle_json
-        error? ? raise(ApiError, json_body['error']) : json_body
-      end
-
-      def handle_raw
-        default_raw_message = {
-          'message' => "Something went wrong with this raw request\n" \
-          "status: #{@response.status}\n" \
-          "headers: #{@response.headers}\n" \
-          "body: #{@response.body}"
-        }
-        error? ? raise(ApiError, default_raw_message) : raw_body
       end
     end
   end

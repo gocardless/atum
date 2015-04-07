@@ -28,18 +28,6 @@ describe Atum::Core::Response do
       it 'should come through raw' do
         expect(body).to eq(response_body)
       end
-
-      context 'when the response is an error' do
-        let(:response) do
-          double(headers: { 'Content-Type' => 'application/text' },
-                 body: 'FOOBARBAZ', status: 400)
-        end
-
-        it 'should raise an error' do
-          expect { api_response.body }.to raise_error(Atum::Core::ApiError,
-                                                      /FOOBARBAZ/)
-        end
-      end
     end
   end
 

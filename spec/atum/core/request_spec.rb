@@ -56,6 +56,21 @@ describe Atum::Core::Request do
       end
     end
 
+    context 'when the response is an error' do
+      let(:response) { 'ABCDEFGH' }
+      let(:stub) do
+        stub_request(:get, full_path)
+          .with(query: query)
+          .to_return(body: response,
+                     status: 500,
+                     headers: { 'Content-Type' => 'application/text' })
+      end
+
+      it 'raises an ApiError' do
+        expect { make_request.call }.to raise_error(Atum::Core::ApiError)
+      end
+    end
+
     context 'when the response is not JSON' do
       let(:response) { 'ABCDEFGH' }
       let(:stub) do
