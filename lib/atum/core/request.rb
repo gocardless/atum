@@ -13,7 +13,7 @@ module Atum
 
       def request
         response = Response.new(make_request)
-        raise ApiError.new(request: options, response: response) if response.error?
+        raise(ApiError, request: options, response: response) if response.error?
 
         return response.body unless response.json?
 

@@ -28,7 +28,7 @@ module Atum
       end
 
       def message
-        return "Unknown error" unless error
+        return 'Unknown error' unless error
         if error.key?('documentation_url')
           "#{error['message']}, see #{error['documentation_url']}"
         else
