@@ -12,21 +12,30 @@ describe Atum::Core::ApiError do
            body: response_body,
            status: 500)
   end
-  let(:content_type) { 'application/json' }
 
-  context 'without a documentation url' do
-    let(:response_body) { { 'error' => { 'message' => message } }.to_json }
-    it { is_expected.to eq(message) }
-  end
+  context 'with a json response' do
+    let(:content_type) { 'application/json' }
 
-  context 'with a documentation url' do
-    let(:response_body) do
-      {
-        'error' => { 'message' => message, 'documentation_url' => url }
-      }.to_json
+    context 'without an error envelope' do
+      let(:response_body) { { 'thing' => { 'message' => message } }.to_json }
+      it { is_expected.to include('Unknown error') }
+      it { is_expected.to include('thing') }
     end
-    it { is_expected.to include(message) }
-    it { is_expected.to include(url) }
+
+    context 'without a documentation url' do
+      let(:response_body) { { 'error' => { 'message' => message } }.to_json }
+      it { is_expected.to eq(message) }
+    end
+
+    context 'with a documentation url' do
+      let(:response_body) do
+        {
+          'error' => { 'message' => message, 'documentation_url' => url }
+        }.to_json
+      end
+      it { is_expected.to include(message) }
+      it { is_expected.to include(url) }
+    end
   end
 
   context 'with a raw response' do
